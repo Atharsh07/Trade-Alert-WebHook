@@ -1,17 +1,19 @@
+// api/webhook.js
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
+const serverless = require("serverless-http");
 
 const app = express();
 app.use(express.json());
 
 // ✅ Add a GET route to check if the server is running
-app.get("/", (req, res) => {
+app.get("/api/webhook", (req, res) => {
     res.send("🚀 Webhook Server is Running!");
 });
 
 // ✅ Webhook Endpoint for ChartInk
-app.post("/", async (req, res) => {
+app.post("/api/webhook", async (req, res) => {
     console.log("📩 Received Alert:", req.body);
 
     // Extract message from ChartInk payload
@@ -50,8 +52,5 @@ async function sendWhatsAppMessage(msg) {
     }
 }
 
-// ✅ Start Express Server for Local Testing
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Webhook server running on port ${PORT}`));
-
-module.exports = app;
+// Export the handler function for Vercel
+module.exports = serverless(app);
