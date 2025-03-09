@@ -5,14 +5,18 @@ const axios = require("axios");
 const app = express();
 app.use(express.json());
 
-// Webhook Endpoint (Handles POST Requests from ChartInk)
+// ✅ Add a GET route to check if the server is running
+app.get("/", (req, res) => {
+    res.send("🚀 Webhook Server is Running!");
+});
+
+// ✅ Webhook Endpoint for ChartInk
 app.post("/", async (req, res) => {
     console.log("📩 Received Alert:", req.body);
 
     // Extract message from ChartInk payload
     const message = req.body.message || "🚀 Alert received from ChartInk";
 
-    // Send WhatsApp message
     try {
         await sendWhatsAppMessage(message);
         res.status(200).json({ success: true, message: "WhatsApp message sent!" });
@@ -21,7 +25,7 @@ app.post("/", async (req, res) => {
     }
 });
 
-// WhatsApp API Function
+// ✅ WhatsApp API Function
 async function sendWhatsAppMessage(msg) {
     const whatsappAPIUrl = `https://graph.facebook.com/v17.0/${process.env.WA_PHONE_ID}/messages`;
 
@@ -46,8 +50,8 @@ async function sendWhatsAppMessage(msg) {
     }
 }
 
-// Start the Express Server (For Local Testing)
+// ✅ Start Express Server for Local Testing
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Webhook server running on port ${PORT}`));
 
-module.exports = app; // Required for Vercel
+module.exports = app;
