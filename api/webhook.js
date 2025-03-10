@@ -29,7 +29,7 @@ app.post("/api/webhook", async (req, res) => {
 
 // ✅ WhatsApp API Function
 async function sendWhatsAppMessage(msg) {
-    const whatsappAPIUrl = `https://graph.facebook.com/v17.0/${process.env.WA_PHONE_ID}/messages`;
+    const whatsappAPIUrl = `https://graph.facebook.com/v22.0/${process.env.WA_PHONE_ID}/messages`;
 
     const payload = {
         messaging_product: "whatsapp",
