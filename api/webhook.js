@@ -7,16 +7,13 @@ const serverless = require("serverless-http");
 const app = express();
 app.use(express.json());
 
-// ✅ Add a GET route to check if the server is running
 app.get("/api/webhook", (req, res) => {
     res.send("🚀 Webhook Server is Running!");
 });
 
-// ✅ Webhook Endpoint for ChartInk
 app.post("/api/webhook", async (req, res) => {
     console.log("📩 Received Alert:", req.body);
 
-    // Extract message from ChartInk payload
     const message = req.body.message || "🚀 Alert received from ChartInk";
 
     try {
@@ -27,13 +24,12 @@ app.post("/api/webhook", async (req, res) => {
     }
 });
 
-// ✅ WhatsApp API Function
 async function sendWhatsAppMessage(msg) {
     const whatsappAPIUrl = `https://graph.facebook.com/v22.0/${process.env.WA_PHONE_ID}/messages`;
 
     const payload = {
         messaging_product: "whatsapp",
-        to: process.env.RECIPIENT_PHONE, // Your WhatsApp number
+        to: process.env.RECIPIENT_PHONE, 
         type: "text",
         text: { body: msg },
     };
@@ -52,5 +48,4 @@ async function sendWhatsAppMessage(msg) {
     }
 }
 
-// Export the handler function for Vercel
 module.exports = serverless(app);
